@@ -6,7 +6,7 @@
 const $ = new Env('百度极速版')
 
 let CookieArr = [];
-let UA = `Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 SP-engine/2.24.0 info baiduboxapp/5.1.1.10 (Baidu; P2 14.2)`;
+let UA = `Mozilla/5.0 (iPhone; CPU iPhone OS 13_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 SP-engine/2.24.0 info baiduboxapp/5.0.0.11 (Baidu; P2 13.5))`;
 const withcash = $.getdata("cash_baidu")||30;
 let tip = 0,totaltips=0;
 if ($.isNode()) {
@@ -121,47 +121,6 @@ function userInfo() {
     })
 }
 
-function withDraw(cash) {
-    return new Promise((resolve, reject) =>{
-        let cashurl = {
-            url: `https://haokan.baidu.com/activity/acuserwithdraw/confirm?productid=2&amount=${cash*100}&trade_type=1`,
-            headers: {
-                Cookie: cookieval,
-                'User-Agent': UA
-            }
-        }
-        $.get(cashurl, (error, response, data) =>{
-            let get_cash = JSON.parse(data);
-            if (get_cash.errno == 0) {
-                $.sub = ' 提现成功: 到账 ' + get_cash.data.money + "元 ",
-                $.msg($.name, $.sub)
-            } else {
-                $.log(data + "\n " + get_cash.msg),
-                $.msg($.name, get_cash.msg)
-            }
-            resolve()
-        })
-    })
-}
-
-
-function invite() {
-    return new Promise((resolve, reject) =>{
-        let inviteurl = {
-            url: `https://haokan.baidu.com/activity/h5/vault?productid=2&inviteCode=RW9ZSW&pkg=%5Bpkg%5D `,
-            headers: {
-                Cookie: cookieval
-            }
-        }
-        $.get(inviteurl, (error, resp, data) =>{
-            if (error) {
-                //$.log("响应错误")
-            }
-            resolve()
-        })
-    })
-}
-
 function coinexChange() {
     return new Promise((resolve, reject) =>{
         let Changeurl = {
@@ -265,35 +224,6 @@ async function getConfigs() {
         }
     }
 }
-
-
-
-//首页宝箱
-function firstbox() {
-    return new Promise((resolve, reject) =>{
-        let bdurl = {
-            url: 'https://mbrowser.baidu.com/lite/gold/receive?service=bdbox',
-            headers: {
-                "Cookie": cookieval,
-                "User-Agent": UA
-            },
-            body: 'task_type=-1&task_id=-1'
-        }
-        $.post(bdurl, (error, resp, data) =>{
-            let get_first = JSON.parse(data)
-            //$.log("获取首页宝箱信息:"+data +'\n')
-            if (get_first.err_no == 0) {
-                $.desc += "【首页宝箱】" + get_first.data.result.tips + "， " + get_first.data.result.countdown_time + "秒后再次开启宝箱\n"
-            } else if (get_first.err_no == 10079) {
-                $.desc += "【首页宝箱】" + get_first.tip + '\n'
-            } else if (get_first.err_no == 10060) {
-                $.desc += get_first.tip + '\n'
-            }
-            resolve()
-        })
-    })
-}
-
 
 
 //视频
