@@ -42,7 +42,7 @@ if ($.isNode()) {
       cookieval = CookieArr[i];
       $.index = i + 1;
       await userInfo();
-      await firstbox();
+      //await firstbox();
       await TaskCenter()
       await showmsg()
      //await drawPrize();
